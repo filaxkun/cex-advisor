@@ -1,33 +1,36 @@
+import os
+import re
+import utils
 from requests_html import HTMLSession as HTMLS
-import sys
-from bs4 import BeautifulSoup as bsup
 
 # Game list
+gameList = utils.getGameList()
+print(gameList)
+
 darkSoulRem = 'https://ie.webuy.com/product-detail?id=3391891997324&categoryName=playstation4-software&superCatName=gaming&title=dark-souls-remastered'
 darkSoul3   = 'https://ie.webuy.com/product-detail?id=3391891987332&categoryName=playstation4-software&superCatName=gaming&title=dark-souls-iii'
 
-myGamez = [ darkSoulRem , darkSoul3 ]
+myGamezUrls = [ darkSoulRem ]
 
+print('getting from my gamez list...')
 
-# -------------------------------------- #
-
-if(len(sys.argv)>=2):
-    url = ['http://'+sys.argv[1]]
-else:
-    url = myGamez
-    print('getting from my gamez list...')
-
-for game_url in url:
-    print('url:',game_url)
+for url in myGamezUrls:
+    print('url:',url)
 
     session = HTMLS()
-    page = session.get(game_url)
+    page = session.get(url)
+
+    page.encoding = page.apparent_encoding
+    
+    print(page.encoding)
 
     page.html.render()
-    #print(page.html.html)
+    print('render done.')
 
-    soup = bsup(page.html.html,'html.parser')
+    renderedPage = page.html.html
+    with open("results.txt","a+") as txt_file:
+       txt_file.write(renderedPage)
+    print('url done.')
 
-    print(soup.prettify())
+#cat result | grep itemDetailsDiv
 
-#cat result | grep -A 40 itemDetailsDiv
