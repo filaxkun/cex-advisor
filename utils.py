@@ -7,12 +7,11 @@ def getGameNames():
             name_list.append(re.split(' ',line)[0])
     return name_list
 
-
-def getLine( file_to_grep, word ):
-    with open( file_to_grep, 'r') as result:
-        for line in result:
-            if re.search('itemDetail',line):
+def getLine( word, str_to_grep ):
+        for line in str_to_grep.split('\n'):
+            if re.search( word, line ):
                 return(line)
+
 
 def getPriceList( string_to_scrape ):
     return re.findall('\d\d?\.\d\d',string_to_scrape)

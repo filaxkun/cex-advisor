@@ -1,4 +1,4 @@
-games_list =\
+games_dict_list =\
 [       { 'name' : 'DarkSoulsRem  ', 'buy_price' : 15, 'url' : 'https://ie.webuy.com/product-detail?id=3391891997324&categoryName=playstation4-software&superCatName=gaming&title=dark-souls-remastered' },
         { 'name' : 'DarkSouls2    ', 'buy_price' : 15, 'url' : 'https://ie.webuy.com/product-detail?id=3391891983143&categoryName=playstation4-software&superCatName=gaming&title=dark-souls-ii-%282%29-scholar-of-the-first-sin' },
         { 'name' : 'DarkSouls3    ', 'buy_price' : 15, 'url' : 'https://ie.webuy.com/product-detail?id=3391891987332&categoryName=playstation4-software&superCatName=gaming&title=dark-souls-iii' },
