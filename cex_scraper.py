@@ -16,27 +16,29 @@ print('Loading my list of gamez...')
 
 for game in gamez:
     print('checking game:', game['name'], end='')
-    session = HTMLS()
-    page = session.get( game['url'] )
-    page.encoding = page.apparent_encoding
-    page.html.render()
-    print(' [render done]')
-    
-    rendered_page = page.html.html
-    
-    focus_obj_on_page = getLine( 'itemDetailsDiv', rendered_page )
-    
-    cex_price_list = getPriceList( focus_obj_on_page )
-    sell_price, cash_price, voucher_price = cex_price_list
 
-    print( cex_price_list , end = '  ')
-    
-    balance = float(voucher_price) - game['buy_price']
-    if( balance > 0 ):
-        print( GREEN + ' +',abs(balance), end=ENDC+'\n' )
-    else:
-        print( RED   + ' -',abs(balance), end=ENDC+'\n' )
+    try:
+         session = HTMLS()
+         page = session.get( game['url'] )
+         page.encoding = page.apparent_encoding
+         page.html.render()
+         print('\t[render done]')
+         
+         rendered_page = page.html.html
+         
+         focus_obj_on_page = getLine( 'itemDetailsDiv', rendered_page )
+         
+         cex_price_list = getPriceList( focus_obj_on_page )
+         sell_price, cash_price, voucher_price = cex_price_list
 
-    print('url done.')
+         print( cex_price_list , end = '  ')
+         
+         balance = float(voucher_price) - game['buy_price']
+         if( balance > 0 ):
+             print( GREEN + '\t+',abs(balance), end=ENDC+'\n' )
+         else:
+             print( RED   + '\t-',abs(balance), end=ENDC+'\n' )
 
-
+         print('url done.')
+    except:
+        print('- problemz -')
