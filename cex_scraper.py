@@ -1,9 +1,6 @@
-import os
 import re
-import sys
-from utils import *
-from time import sleep
-from requests_html import HTMLSession as HTMLS
+import time
+from selenium import webdriver
 
 RED   = '\033[0;31m'
 GREEN = '\033[0;32m'
@@ -14,31 +11,37 @@ import games
 gamez = games.games_dict_list
 print('Loading my list of gamez...')
 
+# Init "browser"
+opt = webdriver.ChromeOptions()
+opt.add_argument('headless')
+br = webdriver.Chrome(options=opt)
+ 
 for game in gamez:
     print('checking game:', game['name'], end='')
+    
+    br.get( game['url'] )
+    
+    # check status
+    time.sleep(2)
+    
+    print('\t[render done]')
 
     try:
-         session = HTMLS()
-         page = session.get( game['url'] )
-         page.encoding = page.apparent_encoding
-         page.html.render()
-         print('\t[render done]')
-         
-         rendered_page = page.html.html
-         
-         focus_obj_on_page = getLine( 'itemDetailsDiv', rendered_page )
-         
-         cex_price_list = getPriceList( focus_obj_on_page )
-         sell_price, cash_price, voucher_price = cex_price_list
+        sell_price    = br.find_element_by_id("Asellprice").text[1:] 
+        cash_price    = br.find_element_by_id("Acashprice").text[1:] 
+        voucher_price = br.find_element_by_id("Aexchprice").text[1:]
 
-         print( cex_price_list , end = '  ')
-         
-         balance = float(voucher_price) - game['buy_price']
-         if( balance > 0 ):
-             print( GREEN + '\t+',abs(balance), end=ENDC+'\n' )
-         else:
-             print( RED   + '\t-',abs(balance), end=ENDC+'\n' )
-
-         print('url done.')
+        cex_price_list = [sell_price, cash_price, voucher_price]
+        print( cex_price_list , end = '  ')
+    
+        balance = float(voucher_price) - game['buy_price']
+        if( balance > 0 ):
+            print( GREEN + '\t+',abs(balance), end=ENDC+'\n' )
+        else:
+            print( RED   + '\t-',abs(balance), end=ENDC+'\n' )
+ 
+        print('url done.')
     except:
         print('- problemz -')
+
+br.quit()
